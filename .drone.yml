@@ -1,9 +1,8 @@
 build:
   image: framgia/laravel-workspace
   commands:
-    - sleep 10
+    - sleep 60 
     - chmod -R 777 storage/
-#    - chmod -R 777 bootstrap/cache/
     - composer install
     - npm install
     - gulp
@@ -13,11 +12,11 @@ build:
 compose:
   database:
     image: mysql
-      environment:
-        - MYSQL_DATABASE: homestead_test
-        - MYSQL_USER: homestead_test
-        - MYSQL_PASSWORD: secret
-        - MYSQL_ROOT_PASSWORD: root
+    environment:
+      MYSQL_DATABASE: homestead_test 
+      MYSQL_USER: homestead_test
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: root
 cache:
   mount:
     - .git

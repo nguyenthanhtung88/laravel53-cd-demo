@@ -1,25 +1,25 @@
 build:
-    image: framgia/laravel-workspace
-    commands:
-        - sleep 10
-        - chmod -R 777 storage/
-        - chmod -R 777 bootstrap/cache/
-        - composer install
-        - npm install
-        - gulp
-        - cp .env.testing .env
-        - php artisan migrate --database=mysql_test
-        - vendor/bin/phpunit
+  image: framgia/laravel-workspace
+  commands:
+    - sleep 10
+    - chmod -R 777 storage/
+#    - chmod -R 777 bootstrap/cache/
+    - composer install
+    - npm install
+    - gulp
+    - cp .env.testing .env
+    - php artisan migrate --database=mysql_test
+    - vendor/bin/phpunit
 compose:
-    database:
-        image: mysql
-        environment:
-            - MYSQL_DATABASE: homestead_test
-            - MYSQL_USER: homestead_test
-            - MYSQL_PASSWORD: secret
-            - MYSQL_ROOT_PASSWORD: root
+  database:
+    image: mysql
+      environment:
+        - MYSQL_DATABASE: homestead_test
+        - MYSQL_USER: homestead_test
+        - MYSQL_PASSWORD: secret
+        - MYSQL_ROOT_PASSWORD: root
 cache:
-    mount:
-        - .git
-        - vendor
-        - node_modules
+  mount:
+    - .git
+    - vendor
+    - node_modules

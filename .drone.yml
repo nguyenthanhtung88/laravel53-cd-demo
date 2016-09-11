@@ -3,7 +3,6 @@ build:
   commands:
     - sleep 10
     - chmod -R 777 storage/
-#    - chmod -R 777 bootstrap/cache/
     - composer install
     - npm install
     - gulp

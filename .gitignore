@@ -10,10 +10,9 @@ app/storage/
 .env.php
 .env
 
-# Rocketeer PHP task runner and deployment package. https://github.com/rocketeers/rocketeer
-.rocketeer/
-
 /public/storage
 /.idea
 Homestead.json
 Homestead.yaml
+
+.rocketeer/logs

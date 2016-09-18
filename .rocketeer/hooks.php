@@ -23,8 +23,19 @@ return [
 
     // Tasks to execute after the core Rocketeer Tasks
     'after'  => [
-        'setup'   => [],
-        'deploy'  => [],
+        'setup'   => [
+            function ($task) {
+                $sharedFolder = $task->releasesManager->paths->getFolder('shared');
+                return $task->run('touch ' . $sharedFolder . '/.env');
+            },
+        ],
+        'deploy'  => [
+            'sudo /etc/init.d/php7.0-fpm restart',
+            'sudo /etc/init.d/nginx restart'
+        ],
+        'dependencies' => [
+            'gulp'
+        ],
         'cleanup' => [],
     ],
 

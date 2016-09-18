@@ -21,7 +21,7 @@ return [
     'password'   => '',
 
     // The branch to deploy
-    'branch'     => 'develop',
+    'branch'     => 'master',
 
     // Whether your SCM should do a "shallow" clone of the repository
     // or not – this means a clone with just the latest state of your

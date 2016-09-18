@@ -1,6 +1,7 @@
 <?php
 
 use Rocketeer\Services\Connections\ConnectionsHandler;
+use Rocketeer\Binaries\PackageManagers\Composer;
 
 return [
 
@@ -30,13 +31,22 @@ return [
     ////////////////////////////////////////////////////////////////////
 
     // The default remote connection(s) to execute tasks on
-    'default'          => ['staging'],
+    'default'          => ['local'],
 
     // The various connections you defined
     // You can leave all of this empty or remove it entirely if you don't want
     // to track files with credentials : Rocketeer will prompt you for your credentials
     // and store them locally
     'connections'      => [
+        'local' => [
+            'host'      => 'localhost:9999',
+            'username'  => 'deploy',
+            'password'  => '',
+            'key'       => '',
+            'keyphrase' => '',
+            'agent'     => '',
+            'db_role'   => true,
+        ],
         'staging' => [
             'host'      => '108.61.187.239',
             'username'  => 'deploy',
@@ -62,14 +72,18 @@ return [
     // In this section you can fine-tune the above configuration according
     // to the stage or connection currently in use.
     // Per example :
-    'stages' => array(
-        'staging' => array(
-            'scm' => array('branch' => 'develop'),
-        ),
-        'production' => array(
-            'scm' => array('branch' => 'master'),
-        ),
-    ),
+    // 'stages' => [
+    //     'staging' => [
+    //         'scm' => [
+    //             'branch' => 'develop'
+    //         ],
+    //     ],
+    //     'production' => [
+    //         'scm' => [
+    //             'branch' => 'master'
+    //         ],
+    //     ],
+    // ],
     ////////////////////////////////////////////////////////////////////
 
     'on'               => [
@@ -77,7 +91,25 @@ return [
         // Stages configurations
         'stages'      => [],
         // Connections configuration
-        'connections' => [],
+        'connections' => [
+            'local' => [
+                'scm' => [
+                    'branch' => 'develop'
+                ],
+                'strategies' => [
+                    'composer' => [
+                        'install' => function (Composer $composer, $task) {
+                            return $composer->install([], ['--no-interaction' => null, '--prefer-dist' => null]);
+                        }
+                    ]
+                ]
+            ],
+            'staging' => [
+                'scm' => [
+                    'branch' => 'develop'
+                ]
+            ]
+        ],
 
     ],
 

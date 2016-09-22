@@ -9,6 +9,7 @@ build:
     - cp .env.testing .env
     - php artisan migrate --database=mysql_test
     - vendor/bin/phpunit
+    - composer require "laravel/envoy=~1.0"
 compose:
   database:
     image: mysql
@@ -19,17 +20,19 @@ compose:
       MYSQL_ROOT_PASSWORD: root
 deploy:
   rocketeer_develop:
-    image: framgia/drone-plugin-ssh-php:php5
+    image: fdplugins/rocketeer
     when:
       branch: develop
     commands:
-      - php rocketeer.phar deploy --on=staging --no-interaction
+      # - php rocketeer.phar deploy --on=staging --no-interaction
+      - vendor/bin/envoy deploy --on=staging
   rocketeer_production:
-    image: framgia/drone-plugin-ssh-php:php5
+    image: fdplugins/rocketeer
     when:
       branch: master
     commands:
-      - php rocketeer.phar deploy --on=production --no-interaction
+      # - php rocketeer.phar deploy --on=production --no-interaction
+      - vendor/bin/envoy deploy --on=production
 cache:
   mount:
     - .git

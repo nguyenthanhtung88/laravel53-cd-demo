@@ -20,14 +20,14 @@ compose:
       MYSQL_ROOT_PASSWORD: root
 deploy:
   rocketeer_develop:
-    image: fdplugins/rocketeer
+    image: fdplugins/ssh-php
     when:
       branch: develop
     commands:
       # - php rocketeer.phar deploy --on=staging --no-interaction
       - vendor/bin/envoy run deploy --on=staging
   rocketeer_production:
-    image: fdplugins/rocketeer
+    image: fdplugins/ssh-php
     when:
       branch: master
     commands:

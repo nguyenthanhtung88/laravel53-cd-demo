@@ -25,14 +25,14 @@ deploy:
       branch: develop
     commands:
       # - php rocketeer.phar deploy --on=staging --no-interaction
-      - vendor/bin/envoy deploy --on=staging
+      - vendor/bin/envoy run deploy --on=staging
   rocketeer_production:
     image: fdplugins/rocketeer
     when:
       branch: master
     commands:
       # - php rocketeer.phar deploy --on=production --no-interaction
-      - vendor/bin/envoy deploy --on=production
+      - vendor/bin/envoy run deploy --on=production
 cache:
   mount:
     - .git

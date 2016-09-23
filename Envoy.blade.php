@@ -119,47 +119,47 @@
 @endstory
 
 @task('show_env', ['parallel' => true])
-    echo "...[execute at remote]";
-    echo "Current Release Name: {{ $release }}";
-    echo "Current Branch is {{ $branch }}";
-    echo "Deployment Start at {{ $dateDisplay }}";
-    echo "----";
+    echo "...[execute at remote]"
+    echo -e "Current Release Name: {{ formatMessage($release, 'bcyan') }}"
+    echo -e "Current Branch is {{ formatMessage($branch, 'bcyan') }}"
+    echo -e "Deployment Start at {{ formatMessage($dateDisplay, 'bcyan') }}"
+    echo "----"
 @endtask
 
 @task('create_release', ['parallel' => true])
-    echo "Create current release folder ..."
+    echo -e "Create current {{ formatMessage('release folder') }} ..."
 
     {{ runCommand("mkdir -p $currentReleaseDir") }}
 
-    echo "Create current release folder done."
+    echo -e "Create current {{ formatMessage('release folder') }} done."
 @endtask
 
 @task('clone', ['parallel' => true])
-    echo "Clone repository ..."
+    echo -e "Clone {{ formatMessage('repository') }} ..."
 
     {{ runCommand("git clone $sourceRepo $currentReleaseDir --branch=$branch --depth=1") }}
 
-    echo "Clone repository done."
+    echo -e "Clone {{ formatMessage('repository') }} done."
 @endtask
 
 @task('submodules', ['parallel' => true])
-    echo "Init submodules if any"
+    echo -e "Init {{ formatMessage('submodules') }} if any ..."
 
     if [ {{ intval($scm['submodules']) }} -eq 1 ]; then
         {{ runCommand("cd $currentReleaseDir") }}
         {{ runCommand("git submodule update --init --recursive") }}
 
-        echo "Init submodules done."
+        echo -e "Init {{ formatMessage('submodules') }} done."
     fi
 @endtask
 
 @task('dependencies', ['parallel' => true])
-    echo "Install dependencies ..."
+    echo -e "Install {{ formatMessage('dependencies') }} ..."
 
     @if (isset($remote['dependencies']['components']) && !empty($remote['dependencies']['components']))
         @foreach ($remote['dependencies']['components'] as $component => $isRun)
             @if ($isRun && !empty($remote['dependencies']['commands'][$component]))
-                echo "--Dependencies/{{ ucfirst($component) }} ..."
+                echo -e "-- {{ formatMessage('Dependencies/' . ucfirst($component)) }} ..."
 
                 {{ runCommand("cd $currentReleaseDir") }}
                 {{ runCommand($remote['dependencies']['commands'][$component]) }}
@@ -167,11 +167,11 @@
         @endforeach
     @endif
 
-    echo "Install dependencies done."
+    echo -e "Install {{ formatMessage('dependencies') }} done."
 @endtask
 
 @task('permissions', ['parallel' => true])
-    echo "Setting permissions ..."
+    echo -e "Setting {{ formatMessage('permissions') }} ..."
 
     @if (!empty($remote['permissions']['files']))
         {{ runCommand("cd $currentReleaseDir") }}
@@ -187,11 +187,11 @@
         @endforeach
     @endif
 
-    echo "Setting permissions done."
+    echo -e "Setting {{ formatMessage('permissions') }} done."
 @endtask
 
 @task('sharing', ['parallel' => true])
-    echo "Sharing folders or files ..."
+    echo -e "{{ formatMessage('Sharing') }} folders or files ..."
 
     @if (!empty($remote['shared']))
         @foreach ($remote['shared'] as $share)
@@ -208,11 +208,11 @@
         @endforeach
     @endif
 
-    echo "Sharing folders or files done."
+    echo -e "{{ formatMessage('Sharing') }} folders or files done."
 @endtask
 
 @task('symlink', ['parallel' => true])
-    echo "Symbolic link ..."
+    echo -e "{{ formatMessage('Symbolic link') }} ..."
 
     if [ ! -e {{ $currentReleaseDir }} ]; then
         if [ ! -e {{ $currentDir }} ]; then
@@ -230,18 +230,18 @@
     {{ runCommand("ln -s $currentReleaseDir $currentDir-temp") }}
     {{ runCommand("mv -Tf $currentDir-temp $currentDir") }}
 
-    echo "Symbolic link done."
+    echo -e "{{ formatMessage('Symbolic link') }} done."
 @endtask
 
 @task('cleanup', ['parallel' => true])
-    echo 'Cleanup up old releases ...';
+    echo -e "{{ formatMessage('Cleanup') }} up old releases ...";
     cd {{ $releaseDir }};
     (ls -rd {{ $releaseDir }}/*|head -n {{ intval($remote['keep_releases'] + 1) }};ls -d {{ $releaseDir }}/*)|sort|uniq -u|xargs rm -rf;
-    echo "Cleanup up old releases done.";
+    echo -e "{{ formatMessage('Cleanup') }} up old releases done.";
 @endtask
 
 @task('rollback_version', ['parallel' => true])
-    echo "Rollback previous version ..."
+    echo -e "{{ formatMessage('Rollback') }} previous version ..."
 
     releases=($((ls -d {{ $releaseDir }}/*)|sort|uniq -u))
     currentRelease=$(readlink {{ $currentDir }})
@@ -272,13 +272,13 @@
     fi
 
     if [ $previousIndex -lt 0 ]; then
-        echo "No previous version found!!!"
+        echo -e "{{ formatMessage('No previous version found!!!', 'bred') }}"
     else
         ln -nfs ${releases[$previousIndex]} {{ $currentDir }}
         echo "Back to version ${releases[$previousIndex]}"
     fi
 
-    echo "Rollback previous version done.";
+    echo -e "{{ formatMessage('Rollback') }} previous version done.";
 @endtask
 
 {{-- Hook events --}}

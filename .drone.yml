@@ -19,19 +19,31 @@ compose:
       MYSQL_PASSWORD: secret
       MYSQL_ROOT_PASSWORD: root
 deploy:
-  rocketeer_develop:
+  # rocketeer_develop:
+  #   image: fdplugins/rocketeer
+  #   when:
+  #     branch: develop
+  #   commands:
+  #     - php rocketeer.phar deploy --on=staging --no-interaction
+  # rocketeer_production:
+  #   image: fdplugins/rocketeer
+  #   when:
+  #     branch: master
+  #   commands:
+  #     - php rocketeer.phar deploy --on=production --no-interaction
+  envoy_develop:
     image: fdplugins/ssh-php
     when:
       branch: develop
     commands:
-      # - php rocketeer.phar deploy --on=staging --no-interaction
+      - ssh-keyscan 108.61.187.239 >> ~/.ssh/known_hosts
       - vendor/bin/envoy run deploy --on=staging
-  rocketeer_production:
+  envoy_production:
     image: fdplugins/ssh-php
     when:
       branch: master
     commands:
-      # - php rocketeer.phar deploy --on=production --no-interaction
+      - ssh-keyscan 108.61.187.239 >> ~/.ssh/known_hosts
       - vendor/bin/envoy run deploy --on=production
 cache:
   mount:

@@ -1,0 +1,24 @@
+language: php
+
+php:
+  - 5.6
+
+env:
+  global:
+    - APP_ENV=testing
+    - APP_DEBUG=true
+    - APP_KEY=base64:WsRS3webyNtHuSUQswgT0tNYJNzOTh/VmveFmUCyepo=
+    - DB_CONNECTION=sqlite
+    - CACHE_DRIVER=file
+    - SESSION_DRIVER=file
+    - QUEUE_DRIVER=sync
+
+sudo: false
+
+before_script:
+  - composer self-update
+  - composer install --prefer-source --no-interaction --dev
+  - touch database/database.sqlite
+  - php artisan migrate --force
+
+script: vendor/bin/phpunit

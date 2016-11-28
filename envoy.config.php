@@ -38,7 +38,7 @@ $remote = [
 
     // The root directory where your applications will be deployed
     // This path *needs* to start at the root, ie. start with a /
-    'root_directory' => '/home/deploy/tungdnt',
+    'root_directory' => '/home/deploy',
 
     // A list of folders/file to be shared between releases
     // Use this to list folders that need to keep their state, like

@@ -33,7 +33,7 @@
     $dateDisplay = $now->format('Y-m-d H:i:s');
     $release = $now->format('YmdHis');
     $branch = isset($branch) ? $branch : $scm['branch'];
-    $rollbackVersion = isset($rollback_version) ? $rollback_version : '123';
+    $rollbackVersion = isset($rollback_version) ? $rollback_version : '';
 
     $rootDirectory = rtrim($remote['root_directory'], '/');
     $appDir = $rootDirectory . '/' . $config['application_name'];
